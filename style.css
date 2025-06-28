@@ -511,3 +511,46 @@ footer {
   }
 }
 
+.menu-toggle {
+  display: none; /* oculto por defecto */
+  font-size: 40px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: 30px;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block; /* visible en móvil */
+  }
+
+  .nav-links {
+    display: none; /* oculto por defecto */
+    flex-direction: column;
+    width: 100%;
+    background-color: #880e4f;
+  }
+
+  .nav-links.active {
+    display: flex; /* muestra cuando el menú está activo */
+  }
+
+  .navbar ul li a {
+    font-size: 25px;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .profile h3 {
+    font-size: 40px;
+    margin-top: 40px;
+  }
+
+  .profile img {
+    width: 100px;
+    height: 100px;
+  }
+}
