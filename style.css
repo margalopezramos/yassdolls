@@ -488,7 +488,8 @@ section h2 {
 
 
 /* VISTA MOVIL*/
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
+  
 
   .profile {
     flex: 1;
@@ -549,8 +550,18 @@ section h2 {
   padding: 5px;
   
   }
-
-
+section h2 {
+  font-size: 2px; /* o el tamaño que prefieras menor al actual */
+  margin-top: 30px; /* reduce margen superior */
+  margin-bottom: 30px; /* reduce margen inferior */
+}
+.reactions-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); /* 3 columnas iguales */
+  gap: 20px;
+  justify-items: center;
+  margin-top: 30px;
+}
 
 
 }
