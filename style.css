@@ -469,3 +469,16 @@ footer {
     height: 250px;
   }
 }
+@media (max-width: 768px) {
+  .navbar {
+    /* flex-wrap ya habilitado, no hace falta cambiar flex-direction */
+    justify-content: flex-start;
+  }
+  .profile {
+    flex-basis: 100%; /* Ocupa toda la fila */
+  }
+  .navbar ul {
+    flex-basis: 100%; /* Ocupa toda la fila debajo de profile */
+    justify-content: flex-start;
+  }
+}
