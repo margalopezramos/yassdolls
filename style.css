@@ -424,6 +424,12 @@ footer {
   list-style-type: disc;
 }
 
+@media (max-width: 768px) {
+  .sidebar ul li:nth-child(-n+2) {
+    font-size: 12px;  /* reduce el tamaño de texto */
+    padding: 5px 10px; /* reduce padding */
+  }
+}
 @media (max-width: 600px) {
   .navbar {
     height: 120px;
