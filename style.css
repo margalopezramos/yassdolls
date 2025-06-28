@@ -336,6 +336,7 @@ footer {
   transition: opacity 0.4s ease;
 }
 
+
 .doll-card .doll-name {
   position: absolute;
   top: 0;
@@ -423,3 +424,42 @@ footer {
   list-style-type: disc;
 }
 
+@media (max-width: 600px) {
+  .navbar {
+    height: 120px;
+    font-size: 30px;
+    padding: 0 15px;
+  }
+
+  .profile img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile h3 {
+    font-size: 40px;
+    margin-top: 50px;
+  }
+
+  #dolls h2 {
+    font-size: 50px;
+  }
+
+  .photos-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .doll-card {
+    width: 90vw; /* para que ocupe casi toda la pantalla */
+  }
+
+  .reactions-grid {
+    grid-template-columns: 1fr !important;
+    gap: 15px;
+  }
+
+  .reaction-item iframe {
+    height: 250px;
+  }
+}
