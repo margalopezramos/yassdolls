@@ -383,16 +383,43 @@ footer {
 }
 
 .order-instructions {
-  font-size: 0.9rem; /* slightly smaller text */
-  line-height: 1.5;
-  margin-top: 20px;
-  color: #333;
-  font-family: sans-serif;
+  font-size: 0.95rem; /* ligeramente más grande para legibilidad */
+  line-height: 1.6;
+  margin-top: 30px;
+  color: #880e4f; /* rosa barbie oscuro */
+  font-family: 'Poppins', sans-serif;
+  background: #fce4ec; /* rosa clarito */
+  border-left: 5px solid #ba68c8; /* borde morado suave */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(186, 104, 200, 0.2);
 }
+
+.order-instructions h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #ba68c8;
+}
+
 .order-instructions ol {
   padding-left: 20px;
 }
+
+.order-instructions ol li {
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 25px;
+}
+
+.order-instructions ol li::before {
+  content: "💖";
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .order-instructions ul {
   padding-left: 20px;
   list-style-type: disc;
 }
+
