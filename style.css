@@ -487,3 +487,27 @@ footer {
     justify-content: flex-start;
   }
 }
+@media (max-width: 768px) {
+  .navbar ul {
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px; /* reduce aún más la separación */
+  }
+
+  .navbar ul li a {
+    font-size: 18px; /* antes tenías 30px; ahora mucho más pequeño */
+    padding: 5px 10px; /* reduce padding para ocupar menos espacio */
+  }
+
+  .profile h3 {
+    font-size: 40px; /* opcional: reduce nombre en móvil si ocupa demasiado */
+    margin-top: 40px;
+  }
+
+  .profile img {
+    width: 100px; /* opcional: reduce retrato para balance visual */
+    height: 100px;
+  }
+}
+
