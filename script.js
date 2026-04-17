@@ -1,3 +1,7 @@
+// 1. CARGA INICIAL DEL CARRITO (Fuera para que sea accesible)
+let cart = JSON.parse(localStorage.getItem('yassCart')) || [];
+
+// 2. LÓGICA DE SCROLL Y NAVBAR
 window.addEventListener('scroll', () => {
   const sections = document.querySelectorAll('section');
   const navLinks = document.querySelectorAll('.navbar ul li a');
@@ -18,78 +22,79 @@ window.addEventListener('scroll', () => {
   });
 });
 
-// Menú hamburguesa móvil
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
-menuToggle.addEventListener('click', () => {
-  navLinks.classList.toggle('active');
-});
-
+// 3. EVENTOS AL CARGAR EL DOM
 document.addEventListener('DOMContentLoaded', () => {
-  // Tooltip del trigger
+  
+  // --- CONTADOR DEL CARRITO ---
+  const cartCount = document.getElementById('cart-count');
+  if (cartCount) cartCount.innerText = cart.length;
+
+  // --- MENÚ HAMBURGUESA MÓVIL ---
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navLinksList = document.querySelector('.nav-links');
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      navLinksList.classList.toggle('active');
+    });
+  }
+
+  // --- LÓGICA DE AÑADIR AL CARRITO ---
+  const addButtons = document.querySelectorAll('.add-to-cart-btn');
+  
+  addButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.stopPropagation(); 
+      const card = button.closest('.doll-card');
+      const name = card.getAttribute('data-name');
+      const price = parseFloat(card.getAttribute('data-price'));
+
+      addToCart(name, price);
+    });
+  });
+
+  function addToCart(name, price) {
+    cart.push({ name, price });
+    // Guardamos en la memoria del navegador para que aparezca en cart.html
+    localStorage.setItem('yassCart', JSON.stringify(cart));
+    
+    // Actualizamos el contador visual en la navbar
+    if (cartCount) cartCount.innerText = cart.length;
+    
+    // Feedback opcional
+    alert("Added to your Yass Cart! 💖");
+  }
+
+  // --- TOOLTIP DE PRECIOS DE ENVÍO ---
   const trigger = document.getElementById('priceListTrigger');
   const tooltip = document.getElementById('priceTooltip');
 
   if (trigger && tooltip) {
     function positionTooltip() {
       const rect = trigger.getBoundingClientRect();
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-
-      tooltip.style.top = (rect.bottom + scrollTop + 8) + 'px';
-      tooltip.style.left = (rect.left + scrollLeft + rect.width / 2) + 'px';
+      tooltip.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+      tooltip.style.left = (rect.left + window.scrollX + rect.width / 2) + 'px';
     }
 
-    // Hover
     trigger.addEventListener('mouseenter', () => {
       tooltip.classList.add('visible');
-      tooltip.setAttribute('aria-hidden', 'false');
       positionTooltip();
     });
 
     trigger.addEventListener('mouseleave', () => {
       tooltip.classList.remove('visible');
-      tooltip.setAttribute('aria-hidden', 'true');
-    });
-
-    // Click
-    trigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      tooltip.classList.toggle('visible');
-      tooltip.setAttribute('aria-hidden', tooltip.classList.contains('visible') ? 'false' : 'true');
-      positionTooltip();
-    });
-
-    // Cerrar si clicas fuera
-    document.addEventListener('click', (e) => {
-      if (!trigger.contains(e.target) && !tooltip.contains(e.target)) {
-        tooltip.classList.remove('visible');
-        tooltip.setAttribute('aria-hidden', 'true');
-      }
-    });
-
-    // Recalcula posición
-    window.addEventListener('scroll', () => {
-      if (tooltip.classList.contains('visible')) positionTooltip();
-    });
-    window.addEventListener('resize', () => {
-      if (tooltip.classList.contains('visible')) positionTooltip();
     });
   }
 
-
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    const select = document.getElementById("artistSelect");
-
+  // --- SELECT DE ARTISTAS ---
+  const select = document.getElementById("artistSelect");
+  if (select) {
     select.addEventListener("change", (e) => {
       const targetId = e.target.value;
       if (targetId) {
         const section = document.querySelector(targetId);
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth" });
-        }
+        if (section) section.scrollIntoView({ behavior: "smooth" });
       }
     });
-  });
+  }
+});
+
