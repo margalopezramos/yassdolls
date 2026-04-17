@@ -668,7 +668,57 @@ section h3 {
 
 }
 
+.btn-pay {
+    width: 100%;
+    background: linear-gradient(135deg, #880e4f 0%, #ad1457 100%); /* Degradado elegante */
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 50px; /* Súper redondeado */
+    font-size: 18px;
+    font-weight: bold;
+    font-family: 'Kite One', sans-serif;
+    text-transform: uppercase; /* Letras en mayúsculas para más fuerza */
+    letter-spacing: 1px; /* Espaciado entre letras */
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animación tipo rebote */
+    box-shadow: 0 6px 15px rgba(136, 14, 79, 0.3); /* Sombra suave */
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
 
+/* Efecto al pasar el ratón */
+.btn-pay:hover {
+    transform: translateY(-3px) scale(1.02); /* Se eleva un poquito */
+    background: linear-gradient(135deg, #ad1457 0%, #ff80ab 100%); /* Cambia a un rosa más vibrante */
+    box-shadow: 0 10px 20px rgba(136, 14, 79, 0.4); /* La sombra crece */
+}
+
+/* Efecto de "clic" */
+.btn-pay:active {
+    transform: translateY(1px);
+    box-shadow: 0 3px 10px rgba(136, 14, 79, 0.2);
+}
+
+/* Efecto de destello (opcional pero muy chulo) */
+.btn-pay::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(45deg);
+    transition: 0.6s;
+    opacity: 0;
+}
+
+.btn-pay:hover::after {
+    left: 100%;
+    opacity: 1;
+}
 
 /* FOOTER */
 
@@ -867,90 +917,61 @@ footer {
    VISTA MÓVIL (Smartphones)
    ========================================================================== */
 @media (max-width: 600px) {
-    
-    /* 1. Navbar: Apilamos el logo y el menú */
-    .navbar {
-        flex-direction: column; /* Pone el logo arriba y los links abajo */
-        padding: 15px 10px;
-        min-height: auto;
-    }
-
-    .profile {
-        margin-bottom: 10px;
-    }
-
-    .profile img {
-        width: 50px; /* Logo más pequeño */
-        height: 50px;
-    }
-
-    .profile h3 {
-        font-size: 22px; /* Nombre más pequeño */
-    }
-
-    /* 2. Menú de navegación: Links en una sola línea con scroll si no caben */
-    .nav-links {
-        gap: 10px;
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap; /* Permite que bajen si son muchos */
-    }
-
-    .nav-links li a {
-        font-size: 14px;
-        padding: 6px 10px;
-    }
-
-    /* 3. El botón del carrito en móvil */
-    .cart-button {
-        padding: 6px 12px;
-        font-size: 14px !important;
-    }
-
-    /* 4. Títulos de sección: Menos exagerados */
-    section h3 {
-        font-size: 35px; /* "Dolls" ya no ocupará media pantalla */
-        margin-bottom: 20px;
-    }
-
-    /* 5. Franja de bienvenida (Home Section) */
-    .home-section {
-        font-size: 15px;
-        padding: 15px 10px;
-        margin-top: 120px; /* Más espacio porque la navbar ahora es más alta al ser vertical */
-    }
-
-    /* 6. Grid de Muñecas: 1 sola columna bien grande */
+    /* Centrar las tarjetas de las muñecas */
     .photos-grid {
-        gap: 20px;
+        display: flex;
+        flex-direction: column; /* Una debajo de otra */
+        align-items: center;    /* Centra las cards horizontalmente */
+        padding: 0;             /* Quita paddings que las empujen a los lados */
+        gap: 30px;
     }
 
     .doll-card {
-        width: 90%; /* Ocupa casi todo el ancho del móvil */
-        height: 350px; /* Un poco más corta para no cansar al hacer scroll */
+        width: 90%;             /* Casi todo el ancho */
+        margin: 0 auto;         /* Fuerza el centrado */
+        height: 420px;
     }
 
-    /* 7. Reacciones: Vídeos que se ajusten al ancho */
-    .reactions-grid {
-        grid-template-columns: 1fr; /* Un vídeo debajo de otro */
-        padding: 0 10px;
+    /* 2. Botón Add to Cart debajo del texto (No al lado) */
+    .doll-card .doll-name {
+        display: flex;
+        flex-direction: column; /* Alinea los elementos uno debajo de otro */
+        justify-content: center;
+        align-items: center;
+        text-align: center;
     }
 
-    .reaction-item {
-        width: 100%;
+    .doll-card .doll-name p {
+        margin: 5px 0;          /* Espacio entre nombre y precio */
+        font-size: 18px;
     }
 
-    .reaction-item iframe {
-        height: 300px; /* Altura de vídeo más cómoda para móvil */
+    .add-to-cart-btn {
+        margin-top: 10px;       /* Lo separa del texto de arriba */
+        width: 80%;             /* Un poco más ancho para que sea fácil de pulsar */
     }
 
-    /* 8. Formulario de Comisiones: Ocupa todo el ancho */
-    .commission-form {
-        width: 95%;
-        padding: 20px;
+    /* 3. Letras del Formulario de Order (Comisiones) */
+    .commission-form label {
+        font-size: 14px;        /* Reducimos el tamaño de las etiquetas */
     }
 
-    #order h1 {
-        font-size: 2rem;
+    .commission-form input, 
+    .commission-form textarea {
+        font-size: 16px;        /* Tamaño estándar para que no se vea enorme */
+        padding: 10px;
+    }
+
+    #order h3 {
+        font-size: 30px;        /* Título "Custom Commissions" más pequeño */
+    }
+
+    #order p {
+        font-size: 16px;        /* Texto descriptivo más pequeño */
+    }
+
+    .btn-pay {
+        font-size: 16px;
+        padding: 12px;
     }
 }
