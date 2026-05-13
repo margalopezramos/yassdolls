@@ -4,426 +4,247 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Cart | Yass.Dolls</title>
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Kite+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- EmailJS -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>(function(){ emailjs.init("2fvz0e5vtG7gAfDha"); })();</script>
-
   <style>
-    /* ── Variables (same as main site) ──────────────────── */
-    :root {
-      --pink-deep:  #880e4f;
-      --pink-mid:   #ad1457;
-      --pink-light: #f8bbd0;
-      --pink-pale:  #fce4ec;
-      --pink-hot:   #ff80ab;
-      --white:      #ffffff;
-      --text-dark:  #2d0a1a;
-      --shadow-sm:  0 4px 12px rgba(136,14,79,.15);
-      --shadow-md:  0 8px 24px rgba(136,14,79,.2);
-      --radius:     16px;
-      --transition: 0.3s cubic-bezier(.4,0,.2,1);
-    }
+   :root {
+  /* MORADOS (Sustituyen al Magenta) */
+  --magenta:        #8a2be2; /* Morado eléctrico (BlueViolet) */
+  --magenta-dark:   #5b17a1; /* Morado oscuro profundo */
+  --magenta-glow:   #b866ff; /* Brillo neón violeta */
+  --magenta-pale:   #f5efff; /* Fondo lavanda muy suave */
+  --magenta-light:  #faf7ff; /* Blanco con matiz lila */
 
-    *, *::before, *::after { box-sizing: border-box; }
+  /* AZUL (Sustituye al Gold - Acento complementario) */
+  --gold:           #4361ee; /* Azul real vibrante */
+
+  /* NEUTROS Y FONDOS */
+  --white:          #ffffff;
+  --cream:          #fcfaff; /* Crema con tinte frío */
+  --ink:            #12002b; /* Negro "Berenjena" casi negro */
+  --ink-soft:       #3f1d6d; /* Morado sombra para textos */
+  --muted:          #715a9e; /* Morado grisáceo para secundarios */
+
+  /* INTERFAZ (Ajustada a la opacidad del morado principal) */
+  --border:         rgba(138, 43, 226, 0.15);
+  --border-strong:  rgba(138, 43, 226, 0.3);
+  --shadow-card:    0 8px 32px rgba(67, 97, 238, 0.12); /* Sutil sombra azulada */
+  --radius:         16px;
+  --ease:           cubic-bezier(.4, 0, .2, 1);
+}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      margin: 0;
-      font-family: 'Kite One', sans-serif;
-      background: linear-gradient(160deg, var(--pink-pale) 0%, #ffe4f0 60%, #fff5f8 100%);
-      min-height: 100vh;
-      padding: 40px 16px 60px;
-      color: var(--text-dark);
+      font-family: 'Space Grotesk', sans-serif;
+      background: linear-gradient(160deg, #fff0f8 0%, #ffe8f5 50%, #fff9e6 100%);
+      min-height: 100vh; padding: 40px 16px 60px;
+      color: var(--ink);
     }
 
-    /* ── Back link ───────────────────────────────────────── */
-    .back-nav {
-      max-width: 960px;
-      margin: 0 auto 20px;
-    }
-
+    .back-nav { max-width: 980px; margin: 0 auto 24px; }
     .back-nav a {
-      color: var(--pink-deep);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 15px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: gap var(--transition);
+      color: var(--muted); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: color .2s;
     }
-    .back-nav a:hover { gap: 10px; }
+    .back-nav a:hover { color: var(--magenta); }
 
-    /* ── Container ───────────────────────────────────────── */
     .cart-container {
-      max-width: 960px;
-      margin: 0 auto;
+      max-width: 980px; margin: 0 auto;
       background: var(--white);
-      padding: 40px 36px;
-      border-radius: 24px;
-      box-shadow: 0 20px 60px rgba(136,14,79,.12);
+      padding: 44px 40px; border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
     }
 
     .cart-title {
-      color: var(--pink-deep);
-      font-family: 'Pacifico', cursive;
-      font-size: clamp(28px, 5vw, 42px);
-      text-align: center;
-      margin: 0 0 32px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900; font-style: italic;
+      text-align: center; margin-bottom: 36px;
+      background: linear-gradient(135deg, var(--magenta-dark), var(--magenta), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    /* ── Layout ──────────────────────────────────────────── */
-    .cart-flex {
-      display: flex;
-      gap: 32px;
-      flex-wrap: wrap;
-    }
-
-    .items-section {
-      flex: 1.1;
-      min-width: 280px;
-    }
-
+    .cart-flex { display: flex; gap: 32px; flex-wrap: wrap; }
+    .items-section { flex: 1.1; min-width: 280px; }
     .items-section h3 {
-      font-size: 18px;
-      color: var(--pink-deep);
-      margin: 0 0 16px;
-      font-weight: 700;
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--magenta-dark); margin-bottom: 16px;
     }
 
     .details-section {
-      flex: 1.5;
-      min-width: 300px;
-      background: var(--pink-pale);
-      padding: 28px;
-      border-radius: var(--radius);
-      border: 1.5px solid var(--pink-light);
+      flex: 1.5; min-width: 300px;
+      background: var(--magenta-light);
+      padding: 28px; border-radius: var(--radius);
+      border: 1px solid var(--border);
     }
-
     .details-section h3 {
-      font-size: 18px;
-      color: var(--pink-deep);
-      margin: 0 0 20px;
-      font-weight: 700;
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--magenta-dark); margin-bottom: 20px;
     }
 
-    /* ── Cart items ──────────────────────────────────────── */
-    #cart-list {
-      border: 1.5px solid var(--pink-light);
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: #fafafa;
-    }
+    #cart-list { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--white); }
 
     .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 13px 16px;
-      border-bottom: 1px solid var(--pink-light);
-      gap: 8px;
-      transition: background var(--transition);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 13px 16px; gap: 8px;
+      border-bottom: 1px solid rgba(233,30,140,.08);
+      transition: background .2s;
     }
-
     .cart-item:last-child { border-bottom: none; }
-    .cart-item:hover { background: var(--pink-pale); }
+    .cart-item:hover { background: var(--magenta-light); }
 
-    .cart-item .item-name {
-      font-size: 14px;
-      font-weight: 600;
-      flex: 1;
-    }
-
-    .cart-item .item-price {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--pink-deep);
-      white-space: nowrap;
-    }
+    .item-name { font-size: 14px; font-weight: 500; flex: 1; color: var(--ink-soft); }
+    .item-price { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--magenta); white-space: nowrap; }
 
     .remove-btn {
-      color: #e53935;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-size: 18px;
-      line-height: 1;
-      padding: 2px 6px;
-      border-radius: 6px;
-      transition: background var(--transition);
-      flex-shrink: 0;
+      color: rgba(173,0,94,.3); border: none; background: none;
+      cursor: pointer; font-size: 16px; padding: 3px 7px; border-radius: 6px;
+      transition: color .2s, background .2s; flex-shrink: 0;
     }
-    .remove-btn:hover { background: #ffebee; }
+    .remove-btn:hover { color: var(--magenta); background: var(--magenta-pale); }
 
-    .empty-cart {
-      text-align: center;
-      padding: 40px 20px;
-      color: #999;
-      font-size: 15px;
-    }
+    .empty-cart { text-align: center; padding: 48px 20px; color: var(--muted); font-size: 15px; line-height: 1.8; }
 
-    /* ── Form ────────────────────────────────────────────── */
-    .form-row {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 0;
-    }
-
-    .form-group {
-      margin-bottom: 14px;
-      flex: 1;
-    }
+    .form-row { display: flex; gap: 12px; }
+    .form-group { margin-bottom: 14px; flex: 1; }
 
     .form-group label {
-      display: block;
-      color: var(--pink-deep);
-      font-weight: 700;
-      margin-bottom: 6px;
-      font-size: 13px;
-      letter-spacing: .3px;
+      display: block; font-size: 11px; font-weight: 600;
+      color: var(--magenta-dark); margin-bottom: 7px;
+      letter-spacing: 1px; text-transform: uppercase;
     }
 
     .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 11px 14px;
-      border: 2px solid var(--pink-light);
-      border-radius: 10px;
-      font-family: 'Kite One', sans-serif;
-      font-size: 14px;
-      background: var(--white);
-      color: var(--text-dark);
-      transition: border-color var(--transition), box-shadow var(--transition);
+    .form-group select {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      font-family: 'Space Grotesk', sans-serif; font-size: 14px;
+      color: var(--ink); background: var(--white);
+      transition: border-color .2s, box-shadow .2s;
     }
-
     .form-group input:focus,
     .form-group select:focus {
-      outline: none;
-      border-color: var(--pink-deep);
-      box-shadow: 0 0 0 3px rgba(136,14,79,.1);
+      outline: none; border-color: var(--magenta);
+      box-shadow: 0 0 0 3px rgba(233,30,140,.12);
     }
 
-    /* ── Summary box ─────────────────────────────────────── */
     .summary-box {
-      background: var(--white);
-      padding: 18px;
-      border-radius: 14px;
-      margin-top: 20px;
-      border: 1.5px solid var(--pink-light);
-      box-shadow: var(--shadow-sm);
+      background: var(--white); padding: 18px; border-radius: 12px;
+      margin-top: 20px; border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(233,30,140,.06);
     }
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      margin: 8px 0;
-      font-size: 15px;
-      color: var(--text-dark);
-    }
-
+    .summary-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 14px; color: var(--muted); }
     .total-row {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--pink-deep);
-      border-top: 2px solid var(--pink-light);
-      padding-top: 12px;
-      margin-top: 10px;
+      font-size: 20px; font-family: 'Playfair Display', serif; font-weight: 700;
+      border-top: 1px solid var(--border); padding-top: 12px; margin-top: 10px; color: var(--ink);
     }
+    .total-row span:last-child { color: var(--magenta); }
 
-    /* ── Checkout button ─────────────────────────────────── */
     .btn-pay {
-      display: block;
-      width: 100%;
-      background: linear-gradient(135deg, var(--pink-deep) 0%, var(--pink-mid) 100%);
-      color: var(--white) !important;
-      text-align: center;
-      padding: 16px;
-      border-radius: 50px;
-      text-decoration: none;
-      margin-top: 20px;
-      font-weight: 700;
-      font-size: 17px;
-      cursor: pointer;
-      border: none;
-      font-family: 'Kite One', sans-serif;
-      letter-spacing: .8px;
-      text-transform: uppercase;
-      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
-      box-shadow: 0 6px 20px rgba(136,14,79,.3);
-      position: relative;
-      overflow: hidden;
+      display: block; width: 100%;
+      background: linear-gradient(135deg, var(--magenta) 0%, var(--magenta-dark) 100%);
+      color: var(--white) !important; text-align: center; padding: 16px; border-radius: 50px;
+      margin-top: 20px; font-weight: 600; font-size: 15px; cursor: pointer; border: none;
+      font-family: 'Space Grotesk', sans-serif; letter-spacing: .5px;
+      transition: transform .25s var(--ease), box-shadow .25s;
+      box-shadow: 0 6px 24px rgba(233,30,140,.3); position: relative; overflow: hidden;
     }
-
     .btn-pay::after {
-      content: '';
-      position: absolute;
-      top: -50%; left: -60%;
-      width: 50%; height: 200%;
-      background: rgba(255,255,255,.18);
-      transform: skewX(-20deg);
-      transition: left .5s ease;
+      content: ''; position: absolute; top: -50%; left: -60%;
+      width: 50%; height: 200%; background: rgba(255,255,255,.15);
+      transform: skewX(-20deg); transition: left .5s ease;
     }
-
     .btn-pay:hover::after { left: 120%; }
-    .btn-pay:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 28px rgba(136,14,79,.4);
-      background: linear-gradient(135deg, var(--pink-mid) 0%, var(--pink-hot) 100%);
-    }
-    .btn-pay:active { transform: translateY(1px); }
+    .btn-pay:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(233,30,140,.45); }
 
-    /* ── Payment options ─────────────────────────────────── */
-    #payment-options {
-      display: none;
-      margin-top: 24px;
-      text-align: center;
-    }
+    #payment-options { display: none; margin-top: 24px; text-align: center; }
 
     .order-id-badge {
-      display: inline-block;
-      background: var(--pink-pale);
-      color: var(--pink-mid);
-      padding: 6px 18px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 16px;
-      border: 1.5px solid var(--pink-light);
+      display: inline-block; background: var(--magenta-pale);
+      color: var(--magenta-dark); padding: 6px 18px; border-radius: 20px;
+      font-weight: 600; font-size: 13px; margin-bottom: 18px;
+      border: 1px solid var(--border-strong); letter-spacing: .5px;
     }
 
-    .payment-note {
-      color: var(--pink-deep);
-      font-weight: 700;
-      margin-bottom: 14px;
-      font-size: 14px;
-    }
+    .payment-note { color: var(--muted); font-weight: 500; margin-bottom: 16px; font-size: 13px; }
 
     .paypal-button, .revolut-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 14px 20px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 700;
-      margin-bottom: 10px;
-      transition: transform var(--transition), box-shadow var(--transition);
-      font-family: 'Kite One', sans-serif;
-      font-size: 15px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 13px 20px; border-radius: 50px; text-decoration: none;
+      font-weight: 600; font-size: 14px; margin-bottom: 10px;
+      transition: transform .2s var(--ease), box-shadow .2s;
+      font-family: 'Space Grotesk', sans-serif;
     }
+    .paypal-button { background: #003087; color: var(--white) !important; box-shadow: 0 4px 14px rgba(0,48,135,.25); }
+    .revolut-button { background: var(--white); color: var(--ink) !important; border: 1.5px solid #ddd; }
+    .paypal-button:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,48,135,.35); }
+    .revolut-button:hover { transform: translateY(-2px); border-color: var(--magenta); }
 
-    .paypal-button {
-      background: #003087;
-      color: var(--white) !important;
-      box-shadow: 0 4px 14px rgba(0,48,135,.3);
-    }
-
-    .revolut-button {
-      background: var(--white);
-      color: #000 !important;
-      border: 2px solid #ddd;
-      box-shadow: 0 4px 14px rgba(0,0,0,.06);
-    }
-
-    .paypal-button:hover  { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,48,135,.4); }
-    .revolut-button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
-
-    .payment-disclaimer {
-      font-size: 11px;
-      color: var(--pink-deep);
-      margin-top: 12px;
-      line-height: 1.5;
-      opacity: .8;
-    }
+    .payment-disclaimer { font-size: 11px; color: var(--muted); margin-top: 14px; line-height: 1.6; }
 
     .add-more-link {
-      display: block;
-      text-align: center;
-      margin-top: 18px;
-      color: var(--pink-mid);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-      transition: color var(--transition);
+      display: block; text-align: center; margin-top: 20px;
+      color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500;
+      transition: color .2s;
     }
-    .add-more-link:hover { color: var(--pink-deep); }
+    .add-more-link:hover { color: var(--magenta); }
 
-    /* ── Toast ───────────────────────────────────────────── */
     .yass-toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
+      position: fixed; bottom: 24px; left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: var(--pink-deep);
-      color: var(--white);
-      padding: 14px 28px;
-      border-radius: 50px;
-      font-weight: 600;
-      font-size: 15px;
-      z-index: 9999;
-      box-shadow: 0 8px 24px rgba(0,0,0,.25);
-      transition: transform .35s cubic-bezier(.175,.885,.32,1.275), opacity .35s ease;
-      opacity: 0;
-      pointer-events: none;
-      white-space: nowrap;
+      background: var(--magenta); color: var(--white);
+      padding: 13px 28px; border-radius: 50px;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px;
+      z-index: 9999; box-shadow: 0 8px 32px rgba(233,30,140,.35);
+      transition: transform .35s cubic-bezier(.175,.885,.32,1.275), opacity .35s;
+      opacity: 0; pointer-events: none; white-space: nowrap;
     }
 
-    /* ── Responsive ──────────────────────────────────────── */
     @media (max-width: 680px) {
-      body { padding: 24px 12px 50px; }
+      body { padding: 20px 12px 50px; }
       .cart-container { padding: 24px 16px; }
       .form-row { flex-direction: column; gap: 0; }
-      .total-row { font-size: 18px; }
+      .total-row { font-size: 17px; }
     }
   </style>
 </head>
 <body>
-
-  <div class="back-nav">
-    <a href="index.html">← Back to the shop</a>
-  </div>
+  <div class="back-nav"><a href="index.html">← Back to the shop</a></div>
 
   <div class="cart-container">
-    <h1 class="cart-title">Your Yass Cart 🛒</h1>
-
+    <h1 class="cart-title">Your Cart ✦</h1>
     <div class="cart-flex">
 
-      <!-- Items -->
       <div class="items-section">
-        <h3>Your Selection 🎀</h3>
+        <h3>Your Selection</h3>
         <div id="cart-list"></div>
         <a href="index.html" class="add-more-link">+ Add more dolls</a>
       </div>
 
-      <!-- Details & Checkout -->
       <div class="details-section">
-        <h3>Shipping Details 📍</h3>
-
+        <h3>Shipping Details</h3>
         <div class="form-row">
           <div class="form-group">
             <label>First Name</label>
-            <input type="text" id="user-name" placeholder="E.g. Ariana" required>
+            <input type="text" id="user-name" placeholder="Ariana" required>
           </div>
           <div class="form-group">
             <label>Last Name</label>
-            <input type="text" id="user-lastname" placeholder="E.g. Grande" required>
+            <input type="text" id="user-lastname" placeholder="Grande" required>
           </div>
         </div>
-
         <div class="form-group">
-          <label>Email Address</label>
+          <label>Email</label>
           <input type="email" id="user-email" placeholder="your@email.com" required>
         </div>
-
         <div class="form-group">
-          <label>Destination Country</label>
+          <label>Country</label>
           <select id="shipping-country" onchange="calculateTotal()">
             <option value="0">Select your country...</option>
             <option value="7">Spain (7€)</option>
@@ -433,50 +254,38 @@
             <option value="30">Rest of the World (30€)</option>
           </select>
         </div>
-
         <div class="form-row">
           <div class="form-group" style="flex:0 0 110px;">
-            <label>ZIP Code</label>
+            <label>ZIP</label>
             <input type="text" id="user-zip" placeholder="12345" required>
           </div>
           <div class="form-group">
-            <label>Shipping Address</label>
-            <input type="text" id="user-address" placeholder="Street, number, floor..." required>
+            <label>Address</label>
+            <input type="text" id="user-address" placeholder="Street, number..." required>
           </div>
         </div>
 
-        <!-- Summary -->
         <div class="summary-box">
-          <div class="summary-row"><span>Dolls subtotal:</span> <span id="subtotal-price">0€</span></div>
-          <div class="summary-row"><span>Shipping:</span> <span id="shipping-price">0€</span></div>
-          <div class="summary-row total-row"><span>Total:</span> <span id="total-price">0€</span></div>
+          <div class="summary-row"><span>Subtotal</span><span id="subtotal-price">0€</span></div>
+          <div class="summary-row"><span>Shipping</span><span id="shipping-price">0€</span></div>
+          <div class="summary-row total-row"><span>Total</span><span id="total-price">0€</span></div>
         </div>
 
-        <button id="main-checkout-btn" class="btn-pay" onclick="handleCheckout()">
-          Proceed to Payment ✨
-        </button>
+        <button id="main-checkout-btn" class="btn-pay" onclick="handleCheckout()">Proceed to Payment ✦</button>
 
-        <!-- Payment options (shown after checkout) -->
         <div id="payment-options">
           <div class="order-id-badge">Order ID: <span id="display-order-id"></span></div>
-          <p class="payment-note">Summary sent! Choose your payment method:</p>
-
+          <p class="payment-note">Summary sent — choose your payment method:</p>
           <a id="paypal-link" href="#" target="_blank" class="paypal-button">
-            <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" style="height:22px;">
+            <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" style="height:20px;">
             Pay with PayPal
           </a>
-
           <a id="revolut-link" href="#" target="_blank" class="revolut-button">
-            <img src="images/Revolut.png" alt="Revolut" style="height:22px;" onerror="this.style.display='none'">
-            Pay with Card (Revolut)
+            <img src="images/Revolut.png" alt="Revolut" style="height:20px;" onerror="this.style.display='none'">
+            Pay with Card
           </a>
-
-          <p class="payment-disclaimer">
-            ✉️ Check your email for your order summary.<br>
-            Once payment is verified, you'll receive a confirmation!
-          </p>
+          <p class="payment-disclaimer">✉️ Check your inbox for the order summary.<br>Confirmation sent once payment is verified.</p>
         </div>
-
       </div>
     </div>
   </div>
@@ -485,110 +294,72 @@
     let cart = JSON.parse(localStorage.getItem('yassCart')) || [];
     window.currentTotal = 0;
 
-    // ── Toast ──────────────────────────────────────────────
     function showToast(msg) {
-      const t = document.createElement('div');
-      t.className = 'yass-toast';
-      t.textContent = msg;
+      const t = document.createElement('div'); t.className = 'yass-toast'; t.textContent = msg;
       document.body.appendChild(t);
-      requestAnimationFrame(() => {
-        t.style.transform = 'translateX(-50%) translateY(0)';
-        t.style.opacity = '1';
-      });
-      setTimeout(() => {
-        t.style.transform = 'translateX(-50%) translateY(80px)';
-        t.style.opacity = '0';
-        setTimeout(() => t.remove(), 400);
-      }, 2800);
+      requestAnimationFrame(() => { t.style.transform = 'translateX(-50%) translateY(0)'; t.style.opacity = '1'; });
+      setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(80px)'; t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2800);
     }
 
-    // ── Render cart items ──────────────────────────────────
     function renderCart() {
       const list = document.getElementById('cart-list');
-
       if (cart.length === 0) {
-        list.innerHTML = '<div class="empty-cart">Your cart is empty 💖<br><small>Go pick your favourite doll!</small></div>';
-        calculateTotal();
-        return;
+        list.innerHTML = '<div class="empty-cart">Your cart is empty ✦<br><small style="font-size:13px;opacity:.6">Go pick your favourite doll!</small></div>';
+        calculateTotal(); return;
       }
-
       list.innerHTML = cart.map((item, i) => `
         <div class="cart-item">
           <span class="item-name">${item.name}</span>
           <span class="item-price">${item.price}€</span>
-          <button class="remove-btn" onclick="removeItem(${i})" title="Remove">✕</button>
-        </div>
-      `).join('');
-
+          <button class="remove-btn" onclick="removeItem(${i})">✕</button>
+        </div>`).join('');
       calculateTotal();
     }
 
-    // ── Calculate totals ───────────────────────────────────
     function calculateTotal() {
       const sel = document.getElementById('shipping-country');
       const subtotal = cart.reduce((s, i) => s + i.price, 0);
       const base = parseFloat(sel.value);
       const shipping = (cart.length > 0 && base > 0) ? base + (cart.length - 1) * 4 : 0;
-
       window.currentTotal = subtotal + shipping;
       document.getElementById('subtotal-price').textContent = subtotal + '€';
       document.getElementById('shipping-price').textContent = shipping + '€';
       document.getElementById('total-price').textContent = window.currentTotal + '€';
     }
 
-    // ── Remove item ────────────────────────────────────────
     function removeItem(index) {
-      const removed = cart[index].name;
-      cart.splice(index, 1);
+      const name = cart[index].name; cart.splice(index, 1);
       localStorage.setItem('yassCart', JSON.stringify(cart));
       renderCart();
       document.getElementById('main-checkout-btn').style.display = 'block';
       document.getElementById('payment-options').style.display = 'none';
-      showToast(`${removed} removed from cart`);
+      showToast(name + ' removed');
     }
 
-    // ── Handle checkout ────────────────────────────────────
     function handleCheckout() {
-      const fName    = document.getElementById('user-name').value.trim();
-      const lName    = document.getElementById('user-lastname').value.trim();
-      const email    = document.getElementById('user-email').value.trim();
-      const zip      = document.getElementById('user-zip').value.trim();
-      const address  = document.getElementById('user-address').value.trim();
-      const sel      = document.getElementById('shipping-country');
-      const country  = sel.options[sel.selectedIndex].text;
-
-      if (!fName || !lName || !email || !zip || !address || sel.value === '0') {
-        showToast('Please fill in all fields 💖');
-        return;
-      }
-      if (cart.length === 0) {
-        showToast('Add some dolls first! 🛍️');
-        return;
-      }
-
-      const num     = Math.floor(1000 + Math.random() * 9000);
+      const fName = document.getElementById('user-name').value.trim();
+      const lName = document.getElementById('user-lastname').value.trim();
+      const email = document.getElementById('user-email').value.trim();
+      const zip   = document.getElementById('user-zip').value.trim();
+      const addr  = document.getElementById('user-address').value.trim();
+      const sel   = document.getElementById('shipping-country');
+      const country = sel.options[sel.selectedIndex].text;
+      if (!fName||!lName||!email||!zip||!addr||sel.value==='0') { showToast('Please fill in all fields ✦'); return; }
+      if (cart.length===0) { showToast('Add some dolls first!'); return; }
+      const num = Math.floor(1000+Math.random()*9000);
       const orderId = `YASS-${fName.substring(0,3).toUpperCase()}${zip.substring(0,2)}-${num}`;
-      const dollList = cart.map(i => `- ${i.name} (${i.price}€)`).join(', ');
-
-      emailjs.send("service_4tj2erx", "template_fs1e76s", {
-        order_id:     orderId,
-        user_name:    fName + ' ' + lName,
-        user_email:   email,
-        user_address: address + ' (ZIP: ' + zip + ')',
-        user_country: country,
-        order_details: dollList,
-        total_price:  window.currentTotal + '€'
-      }).then(() => console.log('Email sent'))
-        .catch(err => console.warn('EmailJS error', err));
-
+      const dollList = cart.map(i=>`- ${i.name} (${i.price}€)`).join(', ');
+      emailjs.send("service_4tj2erx","template_fs1e76s",{
+        order_id:orderId, user_name:fName+' '+lName, user_email:email,
+        user_address:addr+' (ZIP: '+zip+')', user_country:country,
+        order_details:dollList, total_price:window.currentTotal+'€'
+      }).catch(e=>console.warn(e));
       document.getElementById('display-order-id').textContent = orderId;
-      document.getElementById('paypal-link').href   = `https://www.paypal.com/paypalme/crispe30/${window.currentTotal}`;
-      document.getElementById('revolut-link').href  = `https://revolut.me/margar9jva`;
-
+      document.getElementById('paypal-link').href  = `https://www.paypal.com/paypalme/crispe30/${window.currentTotal}`;
+      document.getElementById('revolut-link').href = `https://revolut.me/margar9jva`;
       document.getElementById('main-checkout-btn').style.display = 'none';
       document.getElementById('payment-options').style.display   = 'block';
-
-      showToast(`Order ${orderId} registered! Check your email 💖`);
+      showToast('Order '+orderId+' registered! Check your email ✦');
     }
 
     window.onload = renderCart;
