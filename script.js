@@ -15,26 +15,30 @@ function showToast(message, type = 'success') {
   toast.className = 'yass-toast';
   toast.innerHTML = `<span>${message}</span>`;
 
-  const bg = type === 'success' ? '#880e4f' : '#c62828';
-
   Object.assign(toast.style, {
     position: 'fixed',
-    bottom: '24px',
+    bottom: '28px',
     left: '50%',
     transform: 'translateX(-50%) translateY(80px)',
-    background: bg,
+    background: type === 'success'
+      ? 'linear-gradient(135deg, #9c27b0 0%, #6a1b9a 100%)'
+      : 'linear-gradient(135deg, #c62828 0%, #8e0000 100%)',
     color: '#fff',
-    padding: '14px 28px',
+    padding: '13px 28px',
     borderRadius: '50px',
-    fontFamily: "'Kite One', sans-serif",
+    fontFamily: "'Space Grotesk', sans-serif",
     fontWeight: '600',
-    fontSize: '15px',
+    fontSize: '14px',
     zIndex: '9999',
-    boxShadow: '0 8px 24px rgba(0,0,0,.25)',
+    boxShadow: type === 'success'
+      ? '0 8px 28px rgba(156,39,176,.45)'
+      : '0 8px 28px rgba(198,40,40,.45)',
     transition: 'transform .35s cubic-bezier(.175,.885,.32,1.275), opacity .35s ease',
     opacity: '0',
     whiteSpace: 'nowrap',
     pointerEvents: 'none',
+    letterSpacing: '.3px',
+    border: '1px solid rgba(255,255,255,.2)',
   });
 
   document.body.appendChild(toast);

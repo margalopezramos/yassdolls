@@ -6,154 +6,263 @@
   <title>Your Cart | Yass.Dolls</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Kite+One&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/jpeg" href="images/RETRATO.jpeg">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>(function(){ emailjs.init("2fvz0e5vtG7gAfDha"); })();</script>
   <style>
-   :root {
-  /* MORADOS (Sustituyen al Magenta) */
-  --magenta:        #8a2be2; /* Morado eléctrico (BlueViolet) */
-  --magenta-dark:   #5b17a1; /* Morado oscuro profundo */
-  --magenta-glow:   #b866ff; /* Brillo neón violeta */
-  --magenta-pale:   #f5efff; /* Fondo lavanda muy suave */
-  --magenta-light:  #faf7ff; /* Blanco con matiz lila */
+    :root {
+      --magenta:        #9c27b0;
+      --magenta-dark:   #6a1b9a;
+      --magenta-glow:   #e1bee7;
+      --magenta-pale:   #f3e5f5;
+      --magenta-light:  #f8f1f9;
+      --gold:           #5e35b1;
+      --gold-pale:      #ede7f6;
+      --white:          #ffffff;
+      --cream:          #fafafa;
+      --ink:            #21002d;
+      --ink-soft:       #4a148c;
+      --muted:          #7b1fa2;
+      --border:         rgba(156,39,176,0.12);
+      --border-strong:  rgba(156,39,176,0.25);
+      --shadow-card:    0 8px 32px rgba(74,20,140,0.08);
+      --radius:         16px;
+      --ease:           cubic-bezier(.4,0,.2,1);
+    }
 
-  /* AZUL (Sustituye al Gold - Acento complementario) */
-  --gold:           #4361ee; /* Azul real vibrante */
-
-  /* NEUTROS Y FONDOS */
-  --white:          #ffffff;
-  --cream:          #fcfaff; /* Crema con tinte frío */
-  --ink:            #12002b; /* Negro "Berenjena" casi negro */
-  --ink-soft:       #3f1d6d; /* Morado sombra para textos */
-  --muted:          #715a9e; /* Morado grisáceo para secundarios */
-
-  /* INTERFAZ (Ajustada a la opacidad del morado principal) */
-  --border:         rgba(138, 43, 226, 0.15);
-  --border-strong:  rgba(138, 43, 226, 0.3);
-  --shadow-card:    0 8px 32px rgba(67, 97, 238, 0.12); /* Sutil sombra azulada */
-  --radius:         16px;
-  --ease:           cubic-bezier(.4, 0, .2, 1);
-}
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Space Grotesk', sans-serif;
-      background: linear-gradient(160deg, #fff0f8 0%, #ffe8f5 50%, #fff9e6 100%);
-      min-height: 100vh; padding: 40px 16px 60px;
+      background: linear-gradient(150deg, #fff0f8 0%, #ffe8f5 40%, #fff9e6 100%);
+      min-height: 100vh;
       color: var(--ink);
+      overflow-x: hidden;
     }
 
-    .back-nav { max-width: 980px; margin: 0 auto 24px; }
-    .back-nav a {
+    /* ── NAVBAR ─────────────────────────────────────────────── */
+    .navbar {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 72px;
+      background: var(--white);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 5%; z-index: 1000;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 20px rgba(233,30,140,.08);
+    }
+    .navbar::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--magenta), var(--gold), var(--magenta), transparent);
+      opacity: .7;
+    }
+    .profile { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .profile img {
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 2px solid var(--magenta); object-fit: cover;
+      box-shadow: 0 0 0 3px var(--magenta-pale);
+    }
+    .profile h3 {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-weight: 700; font-size: 22px;
+      background: linear-gradient(135deg, var(--magenta-dark) 0%, var(--magenta) 60%, var(--gold) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .nav-back a {
       color: var(--muted); text-decoration: none;
       font-size: 14px; font-weight: 500;
       display: inline-flex; align-items: center; gap: 6px;
-      transition: color .2s;
+      padding: 7px 16px; border-radius: 30px;
+      border: 1.5px solid var(--border);
+      transition: background .2s, color .2s, border-color .2s;
     }
-    .back-nav a:hover { color: var(--magenta); }
+    .nav-back a:hover { background: var(--magenta-pale); color: var(--magenta-dark); border-color: var(--magenta); }
 
-    .cart-container {
-      max-width: 980px; margin: 0 auto;
-      background: var(--white);
-      padding: 44px 40px; border-radius: 24px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-card);
+    /* ── PAGE LAYOUT ────────────────────────────────────────── */
+    .cart-page {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 108px 24px 80px;
     }
 
+    /* ── HERO HEADER ────────────────────────────────────────── */
+    .cart-header {
+      text-align: center;
+      margin-bottom: 52px;
+      position: relative;
+    }
+    .cart-header::before {
+      content: 'CART';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(80px, 18vw, 180px);
+      color: rgba(156,39,176,.04);
+      white-space: nowrap; pointer-events: none; user-select: none;
+      z-index: 0;
+    }
+    .cart-eyebrow {
+      display: inline-block;
+      background: var(--magenta-pale);
+      color: var(--magenta-dark);
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      padding: 6px 20px; border-radius: 30px;
+      border: 1px solid var(--border-strong);
+      margin-bottom: 20px;
+      position: relative; z-index: 1;
+    }
     .cart-title {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(28px, 5vw, 44px);
+      font-size: clamp(36px, 6vw, 68px);
       font-weight: 900; font-style: italic;
-      text-align: center; margin-bottom: 36px;
       background: linear-gradient(135deg, var(--magenta-dark), var(--magenta), var(--gold));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      position: relative; z-index: 1;
+      margin-bottom: 0;
     }
 
-    .cart-flex { display: flex; gap: 32px; flex-wrap: wrap; }
+    /* ── TWO-COLUMN LAYOUT ──────────────────────────────────── */
+    .cart-flex { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
     .items-section { flex: 1.1; min-width: 280px; }
-    .items-section h3 {
-      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--magenta-dark); margin-bottom: 16px;
+    .details-section { flex: 1.4; min-width: 300px; }
+
+    /* ── SECTION LABELS ─────────────────────────────────────── */
+    .section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--magenta-dark);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
     }
 
-    .details-section {
-      flex: 1.5; min-width: 300px;
-      background: var(--magenta-light);
-      padding: 28px; border-radius: var(--radius);
+    /* ── CART ITEMS CARD ────────────────────────────────────── */
+    .cart-card {
+      background: var(--white);
+      border-radius: 20px;
       border: 1px solid var(--border);
-    }
-    .details-section h3 {
-      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--magenta-dark); margin-bottom: 20px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      margin-bottom: 16px;
     }
 
-    #cart-list { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--white); }
-
+    #cart-list { }
     .cart-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 13px 16px; gap: 8px;
-      border-bottom: 1px solid rgba(233,30,140,.08);
+      padding: 14px 20px; gap: 10px;
+      border-bottom: 1px solid var(--border);
       transition: background .2s;
     }
     .cart-item:last-child { border-bottom: none; }
     .cart-item:hover { background: var(--magenta-light); }
-
-    .item-name { font-size: 14px; font-weight: 500; flex: 1; color: var(--ink-soft); }
-    .item-price { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--magenta); white-space: nowrap; }
-
+    .item-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+    .item-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--magenta), var(--gold));
+      flex-shrink: 0;
+    }
+    .item-name { font-size: 14px; font-weight: 500; color: var(--ink-soft); }
+    .item-price {
+      font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700;
+      color: var(--magenta); white-space: nowrap;
+    }
     .remove-btn {
-      color: rgba(173,0,94,.3); border: none; background: none;
-      cursor: pointer; font-size: 16px; padding: 3px 7px; border-radius: 6px;
-      transition: color .2s, background .2s; flex-shrink: 0;
+      color: rgba(156,39,176,.3); border: none; background: none;
+      cursor: pointer; font-size: 14px; padding: 4px 8px; border-radius: 8px;
+      transition: color .2s, background .2s; flex-shrink: 0; line-height: 1;
     }
     .remove-btn:hover { color: var(--magenta); background: var(--magenta-pale); }
 
-    .empty-cart { text-align: center; padding: 48px 20px; color: var(--muted); font-size: 15px; line-height: 1.8; }
+    .empty-cart {
+      text-align: center; padding: 52px 20px;
+      color: var(--muted); font-size: 15px; line-height: 1.9;
+    }
+    .empty-cart .empty-icon { font-size: 40px; margin-bottom: 12px; display: block; }
+
+    .add-more-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500;
+      padding: 8px 16px; border-radius: 30px;
+      border: 1.5px dashed var(--border-strong);
+      transition: color .2s, border-color .2s, background .2s;
+      margin-top: 10px;
+    }
+    .add-more-link:hover { color: var(--magenta); border-color: var(--magenta); background: var(--magenta-pale); }
+
+    /* ── DETAILS PANEL ──────────────────────────────────────── */
+    .details-card {
+      background: var(--white);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      padding: 28px 28px 24px;
+    }
 
     .form-row { display: flex; gap: 12px; }
     .form-group { margin-bottom: 14px; flex: 1; }
-
     .form-group label {
-      display: block; font-size: 11px; font-weight: 600;
+      display: block; font-size: 10px; font-weight: 700;
       color: var(--magenta-dark); margin-bottom: 7px;
-      letter-spacing: 1px; text-transform: uppercase;
+      letter-spacing: 1.5px; text-transform: uppercase;
     }
-
     .form-group input,
     .form-group select {
       width: 100%; padding: 11px 14px;
-      border: 1.5px solid var(--border); border-radius: 10px;
+      border: 1.5px solid var(--border); border-radius: 12px;
       font-family: 'Space Grotesk', sans-serif; font-size: 14px;
-      color: var(--ink); background: var(--white);
-      transition: border-color .2s, box-shadow .2s;
+      color: var(--ink); background: var(--magenta-light);
+      transition: border-color .2s, box-shadow .2s, background .2s;
     }
     .form-group input:focus,
     .form-group select:focus {
       outline: none; border-color: var(--magenta);
-      box-shadow: 0 0 0 3px rgba(233,30,140,.12);
+      box-shadow: 0 0 0 3px rgba(156,39,176,.1);
+      background: var(--white);
     }
 
+    /* ── SUMMARY BOX ────────────────────────────────────────── */
     .summary-box {
-      background: var(--white); padding: 18px; border-radius: 12px;
-      margin-top: 20px; border: 1px solid var(--border);
-      box-shadow: 0 2px 12px rgba(233,30,140,.06);
+      background: linear-gradient(135deg, var(--magenta-pale) 0%, var(--gold-pale) 100%);
+      padding: 20px 20px 16px;
+      border-radius: 14px;
+      margin-top: 20px;
+      border: 1px solid var(--border-strong);
     }
-    .summary-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 14px; color: var(--muted); }
+    .summary-row {
+      display: flex; justify-content: space-between;
+      padding: 6px 0; font-size: 14px; color: var(--muted);
+      border-bottom: 1px dashed var(--border);
+    }
+    .summary-row:last-of-type { border-bottom: none; }
     .total-row {
-      font-size: 20px; font-family: 'Playfair Display', serif; font-weight: 700;
-      border-top: 1px solid var(--border); padding-top: 12px; margin-top: 10px; color: var(--ink);
+      display: flex; justify-content: space-between;
+      padding-top: 14px; margin-top: 10px;
+      border-top: 2px solid var(--border-strong);
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700; color: var(--ink);
     }
-    .total-row span:last-child { color: var(--magenta); }
+    .total-row span:last-child {
+      background: linear-gradient(135deg, var(--magenta), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
 
+    /* ── CTA BUTTON ─────────────────────────────────────────── */
     .btn-pay {
       display: block; width: 100%;
       background: linear-gradient(135deg, var(--magenta) 0%, var(--magenta-dark) 100%);
-      color: var(--white) !important; text-align: center; padding: 16px; border-radius: 50px;
-      margin-top: 20px; font-weight: 600; font-size: 15px; cursor: pointer; border: none;
+      color: var(--white) !important; text-align: center; padding: 16px 28px;
+      border-radius: 50px; margin-top: 20px;
+      font-weight: 600; font-size: 15px; cursor: pointer; border: none;
       font-family: 'Space Grotesk', sans-serif; letter-spacing: .5px;
       transition: transform .25s var(--ease), box-shadow .25s;
-      box-shadow: 0 6px 24px rgba(233,30,140,.3); position: relative; overflow: hidden;
+      box-shadow: 0 6px 24px rgba(156,39,176,.35);
+      position: relative; overflow: hidden;
     }
     .btn-pay::after {
       content: ''; position: absolute; top: -50%; left: -60%;
@@ -161,141 +270,213 @@
       transform: skewX(-20deg); transition: left .5s ease;
     }
     .btn-pay:hover::after { left: 120%; }
-    .btn-pay:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(233,30,140,.45); }
+    .btn-pay:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(156,39,176,.5); }
+    .btn-pay:active { transform: translateY(1px); }
 
-    #payment-options { display: none; margin-top: 24px; text-align: center; }
+    /* ── PAYMENT OPTIONS ────────────────────────────────────── */
+    #payment-options { display: none; margin-top: 24px; }
+
+    .order-confirmed-header {
+      text-align: center; margin-bottom: 20px;
+    }
+    .order-confirmed-header .checkmark {
+      font-size: 36px; display: block; margin-bottom: 8px;
+    }
+    .order-confirmed-header h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 700; font-style: italic;
+      color: var(--ink); margin-bottom: 4px;
+    }
 
     .order-id-badge {
       display: inline-block; background: var(--magenta-pale);
       color: var(--magenta-dark); padding: 6px 18px; border-radius: 20px;
-      font-weight: 600; font-size: 13px; margin-bottom: 18px;
+      font-weight: 600; font-size: 13px;
       border: 1px solid var(--border-strong); letter-spacing: .5px;
     }
 
-    .payment-note { color: var(--muted); font-weight: 500; margin-bottom: 16px; font-size: 13px; }
+    .payment-note { color: var(--muted); font-size: 13px; margin: 12px 0 16px; text-align: center; }
 
     .paypal-button, .revolut-button {
       display: flex; align-items: center; justify-content: center; gap: 10px;
-      padding: 13px 20px; border-radius: 50px; text-decoration: none;
+      padding: 14px 20px; border-radius: 50px; text-decoration: none;
       font-weight: 600; font-size: 14px; margin-bottom: 10px;
       transition: transform .2s var(--ease), box-shadow .2s;
       font-family: 'Space Grotesk', sans-serif;
     }
     .paypal-button { background: #003087; color: var(--white) !important; box-shadow: 0 4px 14px rgba(0,48,135,.25); }
-    .revolut-button { background: var(--white); color: var(--ink) !important; border: 1.5px solid #ddd; }
+    .revolut-button { background: var(--white); color: var(--ink) !important; border: 1.5px solid var(--border-strong); box-shadow: 0 4px 14px rgba(0,0,0,.07); }
     .paypal-button:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,48,135,.35); }
     .revolut-button:hover { transform: translateY(-2px); border-color: var(--magenta); }
 
-    .payment-disclaimer { font-size: 11px; color: var(--muted); margin-top: 14px; line-height: 1.6; }
-
-    .add-more-link {
-      display: block; text-align: center; margin-top: 20px;
-      color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500;
-      transition: color .2s;
+    .payment-disclaimer {
+      font-size: 12px; color: var(--muted); text-align: center;
+      line-height: 1.7; margin-top: 14px; padding: 12px 16px;
+      background: var(--magenta-light); border-radius: 12px;
+      border: 1px solid var(--border);
     }
-    .add-more-link:hover { color: var(--magenta); }
 
+    /* ── DECORATIVE STARS ───────────────────────────────────── */
+    .sparkle-row {
+      text-align: center;
+      font-size: 10px; letter-spacing: 18px;
+      color: rgba(156,39,176,.2);
+      margin: 8px 0;
+      animation: sparkle 3s ease-in-out infinite;
+    }
+    @keyframes sparkle { 0%,100%{opacity:.2} 50%{opacity:.6} }
+
+    /* ── TOAST ──────────────────────────────────────────────── */
     .yass-toast {
       position: fixed; bottom: 24px; left: 50%;
       transform: translateX(-50%) translateY(80px);
       background: var(--magenta); color: var(--white);
       padding: 13px 28px; border-radius: 50px;
       font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px;
-      z-index: 9999; box-shadow: 0 8px 32px rgba(233,30,140,.35);
+      z-index: 9999; box-shadow: 0 8px 32px rgba(156,39,176,.35);
       transition: transform .35s cubic-bezier(.175,.885,.32,1.275), opacity .35s;
       opacity: 0; pointer-events: none; white-space: nowrap;
     }
 
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    .cart-footer {
+      text-align: center; margin-top: 60px;
+      padding-top: 28px; border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--muted); opacity: .5;
+    }
+
     @media (max-width: 680px) {
-      body { padding: 20px 12px 50px; }
-      .cart-container { padding: 24px 16px; }
+      .cart-page { padding: 90px 16px 60px; }
       .form-row { flex-direction: column; gap: 0; }
-      .total-row { font-size: 17px; }
+      .total-row { font-size: 18px; }
+      .details-card { padding: 20px 18px 18px; }
     }
   </style>
 </head>
 <body>
-  <div class="back-nav"><a href="index.html">← Back to the shop</a></div>
 
-  <div class="cart-container">
-    <h1 class="cart-title">Your Cart ✦</h1>
-    <div class="cart-flex">
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="profile">
+      <img src="images/RETRATO.jpeg" alt="Yass Dolls">
+      <h3>Yass.Dolls</h3>
+    </a>
+    <div class="nav-back">
+      <a href="index.html">← Back to shop</a>
+    </div>
+  </nav>
 
+  <div class="cart-page">
+
+    <!-- HEADER -->
+    <div class="cart-header">
+      <span class="cart-eyebrow">✦ Your selection ✦</span>
+      <h1 class="cart-title">Your Cart</h1>
+    </div>
+
+    <div class="sparkle-row">✦ ✦ ✦ ✦ ✦</div>
+
+    <div class="cart-flex" style="margin-top:36px;">
+
+      <!-- LEFT: ITEMS -->
       <div class="items-section">
-        <h3>Your Selection</h3>
-        <div id="cart-list"></div>
+        <p class="section-label">Your dolls</p>
+        <div class="cart-card">
+          <div id="cart-list"></div>
+        </div>
         <a href="index.html" class="add-more-link">+ Add more dolls</a>
       </div>
 
+      <!-- RIGHT: DETAILS + CHECKOUT -->
       <div class="details-section">
-        <h3>Shipping Details</h3>
-        <div class="form-row">
-          <div class="form-group">
-            <label>First Name</label>
-            <input type="text" id="user-name" placeholder="Ariana" required>
-          </div>
-          <div class="form-group">
-            <label>Last Name</label>
-            <input type="text" id="user-lastname" placeholder="Grande" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="user-email" placeholder="your@email.com" required>
-        </div>
-        <div class="form-group">
-          <label>Country</label>
-          <select id="shipping-country" onchange="calculateTotal()">
-            <option value="0">Select your country...</option>
-            <option value="7">Spain (7€)</option>
-            <option value="14">EU (14€)</option>
-            <option value="18">UK (18€)</option>
-            <option value="25">USA (25€)</option>
-            <option value="30">Rest of the World (30€)</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <div class="form-group" style="flex:0 0 110px;">
-            <label>ZIP</label>
-            <input type="text" id="user-zip" placeholder="12345" required>
-          </div>
-          <div class="form-group">
-            <label>Address</label>
-            <input type="text" id="user-address" placeholder="Street, number..." required>
-          </div>
-        </div>
+        <p class="section-label">Shipping details</p>
+        <div class="details-card">
 
-        <div class="summary-box">
-          <div class="summary-row"><span>Subtotal</span><span id="subtotal-price">0€</span></div>
-          <div class="summary-row"><span>Shipping</span><span id="shipping-price">0€</span></div>
-          <div class="summary-row total-row"><span>Total</span><span id="total-price">0€</span></div>
-        </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="user-name" placeholder="Ariana" required>
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="user-lastname" placeholder="Grande" required>
+            </div>
+          </div>
 
-        <button id="main-checkout-btn" class="btn-pay" onclick="handleCheckout()">Proceed to Payment ✦</button>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="user-email" placeholder="your@email.com" required>
+          </div>
 
-        <div id="payment-options">
-          <div class="order-id-badge">Order ID: <span id="display-order-id"></span></div>
-          <p class="payment-note">Summary sent — choose your payment method:</p>
-          <a id="paypal-link" href="#" target="_blank" class="paypal-button">
-            <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" style="height:20px;">
-            Pay with PayPal
-          </a>
-          <a id="revolut-link" href="#" target="_blank" class="revolut-button">
-            <img src="images/Revolut.png" alt="Revolut" style="height:20px;" onerror="this.style.display='none'">
-            Pay with Card
-          </a>
-          <p class="payment-disclaimer">✉️ Check your inbox for the order summary.<br>Confirmation sent once payment is verified.</p>
+          <div class="form-group">
+            <label>Country</label>
+            <select id="shipping-country" onchange="calculateTotal()">
+              <option value="0">Select your country...</option>
+              <option value="7">Spain (7€)</option>
+              <option value="14">EU (14€)</option>
+              <option value="18">UK (18€)</option>
+              <option value="25">USA (25€)</option>
+              <option value="30">Rest of the World (30€)</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="flex:0 0 110px;">
+              <label>ZIP</label>
+              <input type="text" id="user-zip" placeholder="12345" required>
+            </div>
+            <div class="form-group">
+              <label>Address</label>
+              <input type="text" id="user-address" placeholder="Street, number..." required>
+            </div>
+          </div>
+
+          <div class="summary-box">
+            <div class="summary-row"><span>Subtotal</span><span id="subtotal-price">0€</span></div>
+            <div class="summary-row"><span>Shipping</span><span id="shipping-price">-</span></div>
+            <div class="total-row"><span>Total</span><span id="total-price">0€</span></div>
+          </div>
+
+          <button id="main-checkout-btn" class="btn-pay" onclick="handleCheckout()">Proceed to Payment ✦</button>
+
+          <div id="payment-options">
+            <div class="order-confirmed-header">
+              <span class="checkmark">✉️</span>
+              <h4>Order confirmed!</h4>
+              <span class="order-id-badge">Order ID: <span id="display-order-id"></span></span>
+            </div>
+            <p class="payment-note">Summary sent to your email — choose how to pay:</p>
+            <a id="paypal-link" href="#" target="_blank" class="paypal-button">
+              <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" style="height:20px;">
+              Pay with PayPal
+            </a>
+            <a id="revolut-link" href="#" target="_blank" class="revolut-button">
+              <img src="images/Revolut.png" alt="Revolut" style="height:20px;" onerror="this.style.display='none'">
+              Pay with Card (Revolut)
+            </a>
+            <p class="payment-disclaimer">✉️ Check your inbox for the order summary.<br>Confirmation sent once payment is verified.</p>
+          </div>
+
         </div>
       </div>
+
+    </div><!-- /.cart-flex -->
+
+    <div class="cart-footer">
+      <p>© YassDolls 2025 · All rights reserved · Website by Margarita López</p>
     </div>
-  </div>
+
+  </div><!-- /.cart-page -->
 
   <script>
     let cart = JSON.parse(localStorage.getItem('yassCart')) || [];
     window.currentTotal = 0;
 
     function showToast(msg) {
-      const t = document.createElement('div'); t.className = 'yass-toast'; t.textContent = msg;
+      const existing = document.querySelector('.yass-toast');
+      if (existing) existing.remove();
+      const t = document.createElement('div');
+      t.className = 'yass-toast'; t.textContent = msg;
       document.body.appendChild(t);
       requestAnimationFrame(() => { t.style.transform = 'translateX(-50%) translateY(0)'; t.style.opacity = '1'; });
       setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(80px)'; t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2800);
@@ -304,14 +485,21 @@
     function renderCart() {
       const list = document.getElementById('cart-list');
       if (cart.length === 0) {
-        list.innerHTML = '<div class="empty-cart">Your cart is empty ✦<br><small style="font-size:13px;opacity:.6">Go pick your favourite doll!</small></div>';
+        list.innerHTML = `<div class="empty-cart">
+          <span class="empty-icon">🛒</span>
+          Your cart is empty ✦<br>
+          <small style="font-size:13px;opacity:.6;display:block;margin-top:4px;">Go pick your favourite doll!</small>
+        </div>`;
         calculateTotal(); return;
       }
       list.innerHTML = cart.map((item, i) => `
         <div class="cart-item">
-          <span class="item-name">${item.name}</span>
+          <div class="item-left">
+            <span class="item-dot"></span>
+            <span class="item-name">${item.name}</span>
+          </div>
           <span class="item-price">${item.price}€</span>
-          <button class="remove-btn" onclick="removeItem(${i})">✕</button>
+          <button class="remove-btn" onclick="removeItem(${i})" title="Remove">✕</button>
         </div>`).join('');
       calculateTotal();
     }
@@ -323,37 +511,38 @@
       const shipping = (cart.length > 0 && base > 0) ? base + (cart.length - 1) * 4 : 0;
       window.currentTotal = subtotal + shipping;
       document.getElementById('subtotal-price').textContent = subtotal + '€';
-      document.getElementById('shipping-price').textContent = shipping + '€';
+      document.getElementById('shipping-price').textContent = (cart.length > 0 && base > 0) ? shipping + '€' : '-';
       document.getElementById('total-price').textContent = window.currentTotal + '€';
     }
 
     function removeItem(index) {
-      const name = cart[index].name; cart.splice(index, 1);
+      const name = cart[index].name;
+      cart.splice(index, 1);
       localStorage.setItem('yassCart', JSON.stringify(cart));
       renderCart();
       document.getElementById('main-checkout-btn').style.display = 'block';
       document.getElementById('payment-options').style.display = 'none';
-      showToast(name + ' removed');
+      showToast(name + ' removed from cart');
     }
 
     function handleCheckout() {
-      const fName = document.getElementById('user-name').value.trim();
-      const lName = document.getElementById('user-lastname').value.trim();
-      const email = document.getElementById('user-email').value.trim();
-      const zip   = document.getElementById('user-zip').value.trim();
-      const addr  = document.getElementById('user-address').value.trim();
-      const sel   = document.getElementById('shipping-country');
+      const fName   = document.getElementById('user-name').value.trim();
+      const lName   = document.getElementById('user-lastname').value.trim();
+      const email   = document.getElementById('user-email').value.trim();
+      const zip     = document.getElementById('user-zip').value.trim();
+      const addr    = document.getElementById('user-address').value.trim();
+      const sel     = document.getElementById('shipping-country');
       const country = sel.options[sel.selectedIndex].text;
       if (!fName||!lName||!email||!zip||!addr||sel.value==='0') { showToast('Please fill in all fields ✦'); return; }
-      if (cart.length===0) { showToast('Add some dolls first!'); return; }
-      const num = Math.floor(1000+Math.random()*9000);
+      if (cart.length===0) { showToast('Add some dolls first! 🛒'); return; }
+      const num     = Math.floor(1000+Math.random()*9000);
       const orderId = `YASS-${fName.substring(0,3).toUpperCase()}${zip.substring(0,2)}-${num}`;
       const dollList = cart.map(i=>`- ${i.name} (${i.price}€)`).join(', ');
       emailjs.send("service_4tj2erx","template_fs1e76s",{
-        order_id:orderId, user_name:fName+' '+lName, user_email:email,
-        user_address:addr+' (ZIP: '+zip+')', user_country:country,
-        order_details:dollList, total_price:window.currentTotal+'€'
-      }).catch(e=>console.warn(e));
+        order_id: orderId, user_name: fName+' '+lName, user_email: email,
+        user_address: addr+' (ZIP: '+zip+')', user_country: country,
+        order_details: dollList, total_price: window.currentTotal+'€'
+      }).catch(e => console.warn(e));
       document.getElementById('display-order-id').textContent = orderId;
       document.getElementById('paypal-link').href  = `https://www.paypal.com/paypalme/crispe30/${window.currentTotal}`;
       document.getElementById('revolut-link').href = `https://revolut.me/margar9jva`;
