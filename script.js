@@ -197,7 +197,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (rect.top < window.innerHeight - 60) el.classList.add('visible');
   });
 
+  // ─ Image lightbox (click a doll photo to see it full size) ─
+  initImageLightbox();
+
 });
+
+// ── IMAGE LIGHTBOX ───────────────────────────────────────────
+function initImageLightbox() {
+  const modal    = document.getElementById('imageModal');
+  const modalImg = document.getElementById('imageModalImg');
+  const closeBtn = document.querySelector('.image-modal-close');
+  if (!modal || !modalImg) return;
+
+  function openModal(img) {
+    modalImg.src = img.src;
+    modalImg.alt = img.alt || '';
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.doll-card-image').forEach(container => {
+    container.addEventListener('click', e => {
+      e.stopPropagation();
+      const img = container.querySelector('img');
+      if (img) openModal(img);
+    });
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+  // Close when clicking the dark background (but not the image itself)
+  modal.addEventListener('click', e => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+}
 
 // ── CART HELPERS ─────────────────────────────────────────────
 function updateCartCount() {
