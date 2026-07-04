@@ -1,63 +1,13 @@
 // ============================================================
-// YASS.DOLLS — script.js (upgraded)
+// YASS.DOLLS — script.js
+// General site behaviors shared across pages: nav scroll-spy,
+// hamburger menu, commission form, shipping tooltip, artist
+// select. Cart logic lives in js/cart-utils.js, catalog
+// rendering in js/catalog.js, product page in js/product.js.
 // ============================================================
-
-// 1. CART STATE
-let cart = JSON.parse(localStorage.getItem('yassCart')) || [];
-
-// ── TOAST NOTIFICATION ──────────────────────────────────────
-function showToast(message, type = 'success') {
-  // Remove existing toast
-  const existing = document.querySelector('.yass-toast');
-  if (existing) existing.remove();
-
-  const toast = document.createElement('div');
-  toast.className = 'yass-toast';
-  toast.innerHTML = `<span>${message}</span>`;
-
-  Object.assign(toast.style, {
-    position: 'fixed',
-    bottom: '28px',
-    left: '50%',
-    transform: 'translateX(-50%) translateY(80px)',
-    background: type === 'success'
-      ? 'linear-gradient(135deg, #9c27b0 0%, #6a1b9a 100%)'
-      : 'linear-gradient(135deg, #c62828 0%, #8e0000 100%)',
-    color: '#fff',
-    padding: '13px 28px',
-    borderRadius: '50px',
-    fontFamily: "'Space Grotesk', sans-serif",
-    fontWeight: '600',
-    fontSize: '14px',
-    zIndex: '9999',
-    boxShadow: type === 'success'
-      ? '0 8px 28px rgba(156,39,176,.45)'
-      : '0 8px 28px rgba(198,40,40,.45)',
-    transition: 'transform .35s cubic-bezier(.175,.885,.32,1.275), opacity .35s ease',
-    opacity: '0',
-    whiteSpace: 'nowrap',
-    pointerEvents: 'none',
-    letterSpacing: '.3px',
-    border: '1px solid rgba(255,255,255,.2)',
-  });
-
-  document.body.appendChild(toast);
-
-  requestAnimationFrame(() => {
-    toast.style.transform = 'translateX(-50%) translateY(0)';
-    toast.style.opacity = '1';
-  });
-
-  setTimeout(() => {
-    toast.style.transform = 'translateX(-50%) translateY(80px)';
-    toast.style.opacity = '0';
-    setTimeout(() => toast.remove(), 400);
-  }, 2800);
-}
 
 // ── SCROLL: ACTIVE NAV LINK + FADE-IN ───────────────────────
 window.addEventListener('scroll', () => {
-  // Active nav link
   const sections  = document.querySelectorAll('section[id]');
   const navLinks  = document.querySelectorAll('.navbar ul li a');
   let current = '';
@@ -71,7 +21,6 @@ window.addEventListener('scroll', () => {
     if (link.getAttribute('href') === '#' + current) link.classList.add('active');
   });
 
-  // Fade-in cards
   document.querySelectorAll('.fade-in:not(.visible)').forEach(el => {
     const rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight - 60) el.classList.add('visible');
@@ -81,9 +30,6 @@ window.addEventListener('scroll', () => {
 // ── DOM READY ────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ─ Cart counter ─────────────────────────────────────────
-  updateCartCount();
-
   // ─ Hamburger menu ───────────────────────────────────────
   const menuToggle  = document.querySelector('.menu-toggle');
   const navLinksList = document.querySelector('.nav-links');
@@ -91,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (menuToggle && navLinksList) {
     menuToggle.addEventListener('click', () => {
       navLinksList.classList.toggle('open');
-      // Animate hamburger → X
       const spans = menuToggle.querySelectorAll('span');
       menuToggle.classList.toggle('open');
       if (menuToggle.classList.contains('open')) {
@@ -103,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Close menu when a link is tapped
     navLinksList.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         navLinksList.classList.remove('open');
@@ -115,18 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ─ Add to cart buttons ──────────────────────────────────
-  document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-    button.addEventListener('click', e => {
-      e.stopPropagation();
-      const card  = button.closest('.doll-card');
-      const name  = card.getAttribute('data-name');
-      const price = parseFloat(card.getAttribute('data-price'));
-      addToCart(name, price);
-    });
-  });
-
-  // ─ Fade-in on load ──────────────────────────────────────
+  // ─ Fade-in on load (static, non-catalog elements) ───────
   document.querySelectorAll('.fade-in').forEach(el => {
     const rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight - 60) el.classList.add('visible');
@@ -146,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Send via EmailJS (uses same service as cart)
       if (typeof emailjs !== 'undefined') {
         emailjs.send("service_4tj2erx", "template_fs1e76s", {
           order_id: 'COMM-' + Date.now(),
@@ -187,70 +119,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ─ Apply fade-in class to doll cards ────────────────────
-  document.querySelectorAll('.doll-card').forEach(card => {
-    card.classList.add('fade-in');
-  });
-  // Trigger for ones already in view
-  document.querySelectorAll('.fade-in:not(.visible)').forEach(el => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 60) el.classList.add('visible');
-  });
-
-  // ─ Image lightbox (click a doll photo to see it full size) ─
-  initImageLightbox();
-
 });
-
-// ── IMAGE LIGHTBOX ───────────────────────────────────────────
-function initImageLightbox() {
-  const modal    = document.getElementById('imageModal');
-  const modalImg = document.getElementById('imageModalImg');
-  const closeBtn = document.querySelector('.image-modal-close');
-  if (!modal || !modalImg) return;
-
-  function openModal(img) {
-    modalImg.src = img.src;
-    modalImg.alt = img.alt || '';
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  document.querySelectorAll('.doll-card-image').forEach(container => {
-    container.addEventListener('click', e => {
-      e.stopPropagation();
-      const img = container.querySelector('img');
-      if (img) openModal(img);
-    });
-  });
-
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-  // Close when clicking the dark background (but not the image itself)
-  modal.addEventListener('click', e => {
-    if (e.target === modal) closeModal();
-  });
-
-  // Close on Escape
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-  });
-}
-
-// ── CART HELPERS ─────────────────────────────────────────────
-function updateCartCount() {
-  const el = document.getElementById('cart-count');
-  if (el) el.innerText = cart.length;
-}
-
-function addToCart(name, price) {
-  cart.push({ name, price });
-  localStorage.setItem('yassCart', JSON.stringify(cart));
-  updateCartCount();
-  showToast(`${name} added to your cart 🛒`);
-}

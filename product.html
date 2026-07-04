@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yass.Dolls</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Kite+One&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/jpeg" href="images/RETRATO.jpeg">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>(function(){ emailjs.init("2fvz0e5vtG7gAfDha"); })();</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="profile">
+      <img src="images/RETRATO.jpeg" alt="Yass Dolls">
+      <h3>Yass.Dolls</h3>
+    </a>
+    <button class="menu-toggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html#dolls">Dolls</a></li>
+      <li><a href="index.html#reactions">Artist reactions</a></li>
+      <li><a href="index.html#order">Commission</a></li>
+      <li class="cart-link-container">
+        <a href="cart.html" class="cart-button">
+          🛒 <span id="cart-count">0</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="product-page">
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb" id="breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="crumb-sep">/</span>
+      <a href="index.html#dolls" id="crumb-artist">Dolls</a>
+      <span class="crumb-sep">/</span>
+      <span id="crumb-current">…</span>
+    </nav>
+
+    <!-- LOADING STATE -->
+    <div id="product-loading" class="product-loading">Loading doll details…</div>
+
+    <!-- NOT FOUND STATE -->
+    <div id="product-not-found" class="product-not-found" style="display:none;">
+      <span class="empty-icon">🎀</span>
+      <h2>We couldn't find that doll</h2>
+      <p>It may have sold out or the link might be wrong.</p>
+      <a href="index.html#dolls" class="hero-cta">Back to the collection →</a>
+    </div>
+
+    <!-- PRODUCT CONTENT -->
+    <div id="product-content" class="product-grid" style="display:none;">
+
+      <!-- GALLERY -->
+      <div class="product-gallery">
+        <div class="gallery-carousel" id="gallery-carousel">
+          <div class="gallery-track" id="gallery-track"></div>
+          <button class="gallery-arrow gallery-arrow-prev" id="gallery-prev" aria-label="Previous photo" type="button">‹</button>
+          <button class="gallery-arrow gallery-arrow-next" id="gallery-next" aria-label="Next photo" type="button">›</button>
+        </div>
+        <div class="gallery-dots" id="gallery-dots"></div>
+      </div>
+
+      <!-- BUY BOX -->
+      <div class="product-info">
+        <span class="product-artist" id="product-artist"></span>
+        <h1 class="product-title" id="product-title"></h1>
+
+        <div class="product-rating" id="product-rating" style="display:none;">
+          <span class="stars" id="product-stars"></span>
+          <span class="rating-count" id="product-rating-count"></span>
+        </div>
+
+        <div class="product-price" id="product-price"></div>
+
+        <div class="product-meta">
+          <div class="meta-row"><span class="meta-label">Size</span><span id="product-size"></span></div>
+          <div class="meta-row"><span class="meta-label">Materials</span><span id="product-materials"></span></div>
+        </div>
+
+        <button class="btn-pay product-add-btn" id="product-add-btn">Add to Cart 🛒</button>
+        <a href="cart.html" class="product-view-cart-link">View cart →</a>
+
+        <div class="product-description">
+          <p class="section-label-inline">Description</p>
+          <p id="product-description"></p>
+        </div>
+
+        <div class="product-shipping-note">
+          ✦ Handmade and shipped worldwide. Want something totally custom? Check out the <a href="index.html#order">commissions</a> page.
+        </div>
+      </div>
+
+      <!-- REVIEWS -->
+      <div class="product-reviews" id="product-reviews-section">
+        <p class="section-label-inline">Reviews</p>
+        <div id="product-reviews-list"></div>
+
+        <div class="review-form-wrap">
+          <p class="review-form-title">Leave a review</p>
+          <form id="review-form">
+            <div class="review-form-row">
+              <input type="text" id="review-author" placeholder="Your name" required maxlength="60">
+              <div class="star-picker" id="star-picker" data-rating="5">
+                <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+              </div>
+            </div>
+            <textarea id="review-comment" placeholder="Tell us what you thought..." required maxlength="500" rows="3"></textarea>
+            <button type="submit" class="btn-pay review-submit-btn">Submit review</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- RELATED -->
+      <div class="product-related" id="product-related-section" style="display:none;">
+        <p class="section-label-inline" id="related-label">More from this artist</p>
+        <div class="photos-grid" id="related-grid"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- IMAGE LIGHTBOX -->
+  <div id="imageModal" class="image-modal">
+    <span class="image-modal-close" aria-label="Close">&times;</span>
+    <img class="image-modal-content" id="imageModalImg" src="" alt="">
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="social-prompt">
+      <p>Follow along ♡</p>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/yass.dolls" target="_blank" aria-label="Instagram">
+          <img src="images/instagram.png" alt="Instagram">
+        </a>
+        <a href="https://www.tiktok.com/@yass.dolls" target="_blank" aria-label="TikTok">
+          <img src="images/tiktok.png" alt="TikTok">
+        </a>
+        <a href="https://x.com/yassdolls" target="_blank" aria-label="Twitter/X">
+          <img src="images/twitter.png" alt="Twitter">
+        </a>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-info">
+      <p>© YassDolls 2025 · All rights reserved</p>
+      <p>Website design by Margarita López</p>
+    </div>
+  </footer>
+
+  <script src="js/supabase-config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/cart-utils.js"></script>
+  <script src="js/product.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

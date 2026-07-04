@@ -161,13 +161,19 @@
     }
     .cart-item:last-child { border-bottom: none; }
     .cart-item:hover { background: var(--magenta-light); }
-    .item-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+    .item-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+    .item-thumb {
+      width: 46px; height: 46px; border-radius: 10px; object-fit: cover;
+      flex-shrink: 0; border: 1px solid var(--border);
+    }
+    .item-name-link { text-decoration: none; color: inherit; min-width: 0; }
+    .item-name-link:hover .item-name { color: var(--magenta); }
     .item-dot {
       width: 8px; height: 8px; border-radius: 50%;
       background: linear-gradient(135deg, var(--magenta), var(--gold));
       flex-shrink: 0;
     }
-    .item-name { font-size: 14px; font-weight: 500; color: var(--ink-soft); }
+    .item-name { font-size: 14px; font-weight: 500; color: var(--ink-soft); transition: color .2s; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .item-price {
       font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700;
       color: var(--magenta); white-space: nowrap;
@@ -468,19 +474,9 @@
 
   </div><!-- /.cart-page -->
 
+  <script src="js/cart-utils.js"></script>
   <script>
-    let cart = JSON.parse(localStorage.getItem('yassCart')) || [];
     window.currentTotal = 0;
-
-    function showToast(msg) {
-      const existing = document.querySelector('.yass-toast');
-      if (existing) existing.remove();
-      const t = document.createElement('div');
-      t.className = 'yass-toast'; t.textContent = msg;
-      document.body.appendChild(t);
-      requestAnimationFrame(() => { t.style.transform = 'translateX(-50%) translateY(0)'; t.style.opacity = '1'; });
-      setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(80px)'; t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2800);
-    }
 
     function renderCart() {
       const list = document.getElementById('cart-list');
@@ -495,8 +491,10 @@
       list.innerHTML = cart.map((item, i) => `
         <div class="cart-item">
           <div class="item-left">
-            <span class="item-dot"></span>
-            <span class="item-name">${item.name}</span>
+            ${item.image ? `<img class="item-thumb" src="${item.image}" alt="${item.name}">` : `<span class="item-dot"></span>`}
+            <a class="item-name-link" href="${item.id ? 'product.html?id=' + encodeURIComponent(item.id) : '#'}">
+              <span class="item-name">${item.name}</span>
+            </a>
           </div>
           <span class="item-price">${item.price}€</span>
           <button class="remove-btn" onclick="removeItem(${i})" title="Remove">✕</button>
@@ -516,13 +514,11 @@
     }
 
     function removeItem(index) {
-      const name = cart[index].name;
-      cart.splice(index, 1);
-      localStorage.setItem('yassCart', JSON.stringify(cart));
+      const removed = removeFromCart(index);
       renderCart();
       document.getElementById('main-checkout-btn').style.display = 'block';
       document.getElementById('payment-options').style.display = 'none';
-      showToast(name + ' removed from cart');
+      showToast(removed.name + ' removed from cart');
     }
 
     function handleCheckout() {
