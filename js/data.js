@@ -51,6 +51,24 @@ async function fetchRelatedDolls(artist, excludeId, limit = 4) {
   return data || [];
 }
 
+/** Submit a new review — requires a valid, unused review code.
+ *  Returns { success: true, review } or { success: false, error }. */
+async function submitReviewWithCode(dollId, author, rating, comment, code) {
+  const { data, error } = await supabaseClient.rpc('submit_review', {
+    p_doll_id: dollId,
+    p_author: author,
+    p_rating: rating,
+    p_comment: comment,
+    p_code: code
+  });
+
+  if (error) {
+    console.error('Error submitting review:', error);
+    return { success: false, error: 'server_error' };
+  }
+  return data;
+}
+
 /** Fetch reviews for a given doll. */
 async function fetchReviews(dollId) {
   const { data, error } = await supabaseClient

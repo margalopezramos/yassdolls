@@ -197,10 +197,11 @@ function initReviewForm(dollId) {
     e.preventDefault();
     const author = document.getElementById('review-author').value.trim();
     const comment = document.getElementById('review-comment').value.trim();
+    const code = document.getElementById('review-code').value.trim();
     const rating = parseInt(document.getElementById('star-picker').dataset.rating, 10) || 5;
 
-    if (!author || !comment) {
-      showToast('Please fill in your name and review 💖', 'error');
+    if (!author || !comment || !code) {
+      showToast('Please fill in your name, review and code 💖', 'error');
       return;
     }
 
@@ -208,13 +209,16 @@ function initReviewForm(dollId) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
 
-    const result = await insertReview(dollId, author, rating, comment);
+    const result = await submitReviewWithCode(dollId, author, rating, comment, code);
 
     submitBtn.disabled = false;
     submitBtn.textContent = 'Submit review';
 
-    if (!result) {
-      showToast('Something went wrong, please try again', 'error');
+    if (!result || !result.success) {
+      const message = result && result.error === 'invalid_code'
+        ? 'That review code is invalid or already used ✦'
+        : 'Something went wrong, please try again';
+      showToast(message, 'error');
       return;
     }
 
